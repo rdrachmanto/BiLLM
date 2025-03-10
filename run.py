@@ -8,25 +8,38 @@ from binary import Binarization
 from modelutils import find_layers
 
 
+# def get_model(model):
+    # import torch
+
+    # def skip(*args, **kwargs):
+        # pass
+
+    # torch.nn.init.kaiming_uniform_ = skip
+    # torch.nn.init.uniform_ = skip
+    # torch.nn.init.normal_ = skip
+    # if "opt" in model:
+        # from transformers import OPTForCausalLM
+
+        # model = OPTForCausalLM.from_pretrained(model, torch_dtype="auto")
+        # model.seqlen = model.config.max_position_embeddings
+    # elif "llama" in model:
+        # from transformers import LlamaForCausalLM
+
+        # model = LlamaForCausalLM.from_pretrained(model, torch_dtype="auto")
+        # model.seqlen = 2048
+    # return model
+
+
 def get_model(model):
-    import torch
-
-    def skip(*args, **kwargs):
-        pass
-
-    torch.nn.init.kaiming_uniform_ = skip
-    torch.nn.init.uniform_ = skip
-    torch.nn.init.normal_ = skip
-    if "opt" in model:
-        from transformers import OPTForCausalLM
-
-        model = OPTForCausalLM.from_pretrained(model, torch_dtype="auto")
-        model.seqlen = model.config.max_position_embeddings
-    elif "llama" in model:
-        from transformers import LlamaForCausalLM
-
-        model = LlamaForCausalLM.from_pretrained(model, torch_dtype="auto")
-        model.seqlen = 2048
+    from transformers import LlamaForCausalLM
+    # If the model is a string (Hugging Face model path), load it from the hub
+    # if isinstance(model, str) and "llama" in model:
+        # model = LlamaForCausalLM.from_pretrained(model, torch_dtype="auto")
+        # model.seqlen = 2048
+    # If the model is a local path, load it directly from the given directory
+    model = LlamaForCausalLM.from_pretrained(model, torch_dtype="auto", device_map="auto", local_files_only=True)
+    model.seqlen = 2048
+    
     return model
 
 
